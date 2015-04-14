@@ -31,37 +31,17 @@ class Tree(object):
         self.dict = dict
 
     def add_child(self, child, parent_term, parent_id):
-        if parent_term not in self.__nodes:
-            print parent_term, parent_id
-            raise Exception()
+        if child.term in self.__nodes:
+            for b in self.__nodes[parent_term]:
+                if b.node_id == parent_id:
+                    b.add_child(child)
+                    break
         else:
-            was_added = False
-            if child.term in self.__nodes:
-                was_added = False
-                for b in self.__nodes[parent_term]:
-                    if b.node_id == parent_id:
-                        b.add_child(child)
-                        was_added = True
-                        count = 0
-                        for z in b.childs:
-                            if z.term == child.term:
-                                count += 1
-                        if count > 1:
-                            self.print_tree()
-                            raise Exception()
-                        break
-                if not was_added:
-                    self.print_tree()
-                    raise Exception()
-            else:
-                self.__nodes[child.term].append(child)
-                for b in self.__nodes[parent_term]:
-                    if b.node_id == parent_id:
-                        b.add_child(child)
-                        was_added = True
-                        break
-                if not was_added:
-                    raise Exception()
+            self.__nodes[child.term].append(child)
+            for b in self.__nodes[parent_term]:
+                if b.node_id == parent_id:
+                    b.add_child(child)
+                    break
 
     def build_tree(self):
         level = 1
